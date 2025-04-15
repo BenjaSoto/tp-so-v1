@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <commons/log.h>
-#include "comunicacion.h"
+#include <commons/config.h>
+#include "../../Compartida/include/comunicacion.h"
+#include "../../Compartida/include/config_utils.h"
+
 
 void iterator(char* value);
 

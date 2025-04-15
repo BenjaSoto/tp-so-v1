@@ -1,9 +1,11 @@
-#include "../include/comunicacion.h"
+//#include "../include/comunicacion.h"
+#include "comunicacion.h"
+
 
 t_log* logger;
 
-int iniciar_servidor(void)
-{
+//int iniciar_servidor(void){
+int iniciar_servidor(t_log* logger, const char* name, char* ip, char* puerto) {
 	// Quitar esta línea cuando hayamos terminado de implementar la funcion
 	//assert(!"no implementado!");
 
@@ -30,6 +32,7 @@ int iniciar_servidor(void)
 	listen(socket_servidor,SOMAXCONN);
 
 	freeaddrinfo(servinfo);
+	 log_info(logger, "Escuchando en %s:%s (%s)\n", ip, puerto, name);
 	log_trace(logger, "Listo para escuchar a mi cliente");
 
 	return socket_servidor;

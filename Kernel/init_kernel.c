@@ -1,17 +1,48 @@
 #include "./include/init_kernel.h"
 
+
+typedef struct {
+	char* ip_memoria;
+	char* puerto_memoria;
+	char* puerto_dispatch;
+	char* puerto_interrupt;
+} t_config_kernel;
+
+t_config* config;
+
 int main(void) {
 	
+	//funcion leer/cargar config
+	t_config_kernel *config_kernel = malloc(sizeof(t_config_kernel));
+	//todo pasar el loger a compartida pendiente
 	logger = log_create("kernel.log", "Inicio modulo KERNEL", 1, LOG_LEVEL_DEBUG);
 
 	//TODO leer kernel.config
+	config = iniciar_config("./kernel.config");
+	config_kernel->ip_memoria = config_get_string_value(config, "IP_MEMORIA");
+	config_kernel->puerto_memoria = config_get_string_value(config, "PUERTO_MEMORIA");
 
+	log_info(logger, config_kernel->ip_memoria);
+	
+	
 	//TODO deberia pasar por parametros los valores leidos en kernel.config
-	int server_fd = iniciar_servidor();
+	int server_fd = iniciar_servidor(logger, "kernel",config_kernel->ip_memoria, config_kernel->puerto_memoria);
 	
 	
 	log_info(logger, "Kernel esta listo para recibir");
-	
+
+
+
+	// Primero, liberar las cadenas de caracteres que se asignaron
+free(config_kernel->ip_memoria);   // Se debe liberar la memoria de la cadena asignada
+free(config_kernel->puerto_memoria);
+
+
+// Finalmente, liberar la estructura en sí
+free(config_kernel);
+
+log_destroy(logger);
+
 	int cliente_fd = esperar_cliente(server_fd);
 
 
